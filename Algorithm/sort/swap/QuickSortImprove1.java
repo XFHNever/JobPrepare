@@ -4,25 +4,23 @@ import Algorithm.sort.Sort;
 import Algorithm.sort.SortUtil;
 
 /**
- * Created by never on 2014/9/1.
+ * Created by never on 2014/9/3.
  *
- * 核心思想： 选择一个基准元素(通常是第一个或是最后一个），通过一趟排序将整个元素序列划分为左右两个子序列，左子序列所有元素都比基准元素小，右则
- * 比基准大，然后再分别对子序列进行如上排序。
+ * 快排是一个效率很高的排序算法，但是对于长度很小的序列，其性能远不如一些简单的排序算法快。序列长度M值为5~25时，直接插入排序比快排至少快10%。
+ * 所以我们可以在递归调用过程中，当子序列规模小于预先确定的M时，程序调用直接插入排序进行排序。
  *
- * 时间复杂度： 平均nlog2n； 最差（有序序列，切选取第一个为基准）n(n-1)/2;
- *
- * 空间复杂度：递归的，需要一个栈存放每层递归调用的指针和参数，最理想调用层数log2（n+1），最坏是n-1次递归调用。
- *
- * 不稳定的，适合n较大时。
+ * 另一种改进是在划分时，不对小规模序列排序而掉过，这样得到一个整体上基本排好序的序列，然后再采用直接插入排序。
  */
-public class QuickSort implements Sort {
+public class QuickSortImprove1 implements Sort {
     @Override
     public void sort(int[] array) {
         quicksort(array, 0 , array.length-1);
     }
 
     public void quicksort(int[] array, int low, int high) {
-        if (low < high) {
+        if (high - low <= 5) {
+            insert(array, low, high);
+        } else {
             int partition = partition(array, low, high);
             quicksort(array, low, partition - 1);
             quicksort(array, partition + 1, high);
@@ -47,5 +45,9 @@ public class QuickSort implements Sort {
         }
 
         return low;
+    }
+
+    public void insert(int[] array, int low, int high) {
+
     }
 }

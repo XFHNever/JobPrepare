@@ -34,6 +34,14 @@ public class Test {
         Sort bubbleImprov3 = new BubbleImprove3();
         bubbleImprov3.sort(array4);
         Test.printArray(array4);
+
+
+        System.out.println("============= Quick Sort ===============");
+        int[] array5 = {2, 40, 1, 4, 23, 90,56};
+        Test.printArray(array5);
+        Sort quickSort = new QuickSort();
+        quickSort.sort(array5);
+        Test.printArray(array5);
     }
 
     public static void printArray(int[] array) {
