@@ -9,4 +9,12 @@ public class SortUtil {
         array[left] = array[right];
         array[right] = tem;
     }
+
+    public static void printArray(int[] array) {
+        int length = array.length;
+        for (int i = 0; i < length; i++) {
+            System.out.print(array[i] + " ");
+        }
+        System.out.println("");
+    }
 }
