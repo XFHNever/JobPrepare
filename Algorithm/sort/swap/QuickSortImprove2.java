@@ -39,6 +39,7 @@ public class QuickSortImprove2 implements Sort{
 
     public int partition(int[] array, int left, int right) {
         int pivot = median3(array, left, right);
+        int k = right;
 
         while (left < right) {
             while (left < right && array[left] < pivot) {
@@ -48,11 +49,28 @@ public class QuickSortImprove2 implements Sort{
                 right--;
             }
 
-
+            SortUtil.swap(array, left, right);
+            left++;
+            right--;
         }
+        if (array[left] > pivot) {
+            array[k] = array[left];
+            array[left] = pivot;
+        }
+
+        return  left;
     }
 
     public void quickSort(int[] array, int left, int right) {
+        if (right - left <= 5) {
+            insert(array, left, right);
+        } else {
+            int partition = partition(array, left, right);
+            quickSort(array, left, partition - 1);
+            quickSort(array, partition + 1, right);
+        }
+    }
 
+    private void insert(int[] array, int left, int right) {
     }
 }
