@@ -14,5 +14,12 @@ public class Test {
         Sort simpleSelectSort = new SimpleSelectSort();
         simpleSelectSort.sort(array1);
         SortUtil.printArray(array1);
+
+        System.out.println("============= Heap Sort ===============");
+        int[] array2 = {1, 4, 2, 40, 23, 90,56};
+        SortUtil.printArray(array2);
+        Sort heapSort = new HeapSort();
+        heapSort.sort(array2);
+        SortUtil.printArray(array2);
     }
 }
