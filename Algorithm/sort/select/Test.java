@@ -21,5 +21,12 @@ public class Test {
         Sort heapSort = new HeapSort();
         heapSort.sort(array2);
         SortUtil.printArray(array2);
+
+        System.out.println("============= Tournament Sort ===============");
+        int[] array3 = {1, 4, 2, 40, 23, 90,56};
+        SortUtil.printArray(array3);
+        Sort tournamentSort = new TournamentSort();
+        tournamentSort.sort(array3);
+        SortUtil.printArray(array3);
     }
 }
