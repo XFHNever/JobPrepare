@@ -53,13 +53,4 @@ public class MergeSort2 implements Sort {
             array[low++] = temArray[m];
         }
     }
-
-    private void mergeSort(int[] array, int low, int high) {
-        if (low < high) {
-            int middle = (low + high)/2;
-            mergeSort(array, low, middle);
-            mergeSort(array, middle + 1, high);
-            merge(array, low, middle, high);
-        }
-    }
 }
