@@ -1,4 +1,4 @@
-package Algorithm.sort.bucket;
+package Algorithm.sort.distribution;
 
 import Algorithm.sort.Sort;
 import Algorithm.sort.SortUtil;
@@ -6,7 +6,7 @@ import Algorithm.sort.SortUtil;
 /**
  * Created by soft on 2014/9/6.
  */
-public class BucketTest {
+public class DistributionTest {
     public static void main(String arg[]) {
         System.out.println("============= bucket Sort ===============");
         int[] array1 = {1, 4, 2, 40, 23, 90,56};

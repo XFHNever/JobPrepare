@@ -21,5 +21,12 @@ public class MergeTest {
         Sort mergeSort2 = new MergeSort2();
         mergeSort2.sort(array2);
         SortUtil.printArray(array2);
+
+        System.out.println("============= Merge Sort Improve ===============");
+        int[] array3 = {1, 4, 2, 40, 23, 90,56};
+        SortUtil.printArray(array3);
+        Sort mergeSortImprove = new MergeSortImprove();
+        mergeSortImprove.sort(array3);
+        SortUtil.printArray(array3);
     }
 }

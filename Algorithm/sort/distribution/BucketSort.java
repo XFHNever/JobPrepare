@@ -1,4 +1,4 @@
-package Algorithm.sort.bucket;
+package Algorithm.sort.distribution;
 
 import Algorithm.sort.Sort;
 
