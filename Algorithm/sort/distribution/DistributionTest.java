@@ -14,5 +14,12 @@ public class DistributionTest {
         Sort bucketSort = new BucketSort();
         bucketSort.sort(array1);
         SortUtil.printArray(array1);
+
+        System.out.println("============= Radix Sort ===============");
+        int[] array2 = {1, 4, 2, 40, 23, 90,56};
+        SortUtil.printArray(array2);
+        Sort radixSort = new RadixSort();
+        radixSort.sort(array2);
+        SortUtil.printArray(array2);
     }
 }
