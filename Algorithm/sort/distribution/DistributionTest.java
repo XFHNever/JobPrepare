@@ -6,14 +6,6 @@ import Algorithm.sort.SortUtil;
 /**
  * Created by soft on 2014/9/6.
  *
- * 核心思想
- *
- * 时间复杂度
- *
- * 空间复杂度
- *
- * 稳定的
- *
  */
 public class DistributionTest {
     public static void main(String arg[]) {

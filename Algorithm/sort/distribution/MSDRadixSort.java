@@ -5,6 +5,14 @@ import Algorithm.sort.SortUtil;
 
 /**
  * Created by soft on 2014/9/7.
+ *
+ * 核心思想:利用多排序码排序实现对单个排序码排序的算法。MSD是首先根据最高位排序码进行排序，然后再分别对低位排序。
+ *
+ * 时间复杂度: O(k·n)，其中n是排序元素个数，k是数字位数。
+ *
+ * 空间复杂度: k*n + k*10
+ *
+ * 稳定的，适合d较小的大量数组
  */
 public class MSDRadixSort implements Sort {
     @Override
