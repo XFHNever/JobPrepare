@@ -3,9 +3,9 @@ package Algorithm.sort.distribution;
 import Algorithm.sort.Sort;
 
 /**
- * Created by soft on 2014/9/7.
+ * Created by never on 2014/9/8.
  */
-public class RadixSort implements Sort {
+public class LSDRadixSort implements Sort {
     @Override
     public void sort(int[] array) {
 
