@@ -41,7 +41,7 @@ UDP是用户数据报协议，是一个简单的面向数据报的传输层协�
 ##TCP的3次握手和4次挥手
 TCP报文格式：
 
-![TCP报文格式](https://github.com/XFHNever/JobPrepare/tree/master/images/net1-1.png)
+![TCP报文格式](https://github.com/XFHNever/JobPrepare/blob/master/images/net1-1.png)
 
 上图中有几个字段需要重点介绍下：
 
@@ -59,7 +59,7 @@ TCP报文格式：
 ####三次握手
 所谓三次握手（Three-Way Handshake）即建立TCP连接，就是指建立一个TCP连接时，需要客户端和服务端总共发送3个包以确认连接的建立。在socket编程中，这一过程由客户端执行connect来触发，整个流程如下图所示：
 
-![三次握手](https://github.com/XFHNever/JobPrepare/tree/master/images/net1-2.png)
+![三次握手](https://github.com/XFHNever/JobPrepare/blob/master/images/net1-2.png)
 
 - 第一次握手：Client将标志位SYN置为1，随机产生一个值seq=J，并将该数据包发送给Server，Client进入SYN_SENT状态，等待Server确认。
 - 第二次握手：Server收到数据包后由标志位SYN=1知道Client请求建立连接，Server将标志位SYN和ACK都置为1，ack=J+1，随机产生一个值seq=K，并将该数据包发送给Client以确认连接请求，Server进入SYN_RCVD状态。
@@ -74,7 +74,7 @@ TCP报文格式：
 ####四次挥手
 四次挥手（Four-Way Wavehand）即终止TCP连接，就是指断开一个TCP连接时，需要客户端和服务端总共发送4个包以确认连接的断开。在socket编程中，这一过程由客户端或服务端任一方执行close来触发，整个流程如下图所示：
 
-![四次挥手](https://github.com/XFHNever/JobPrepare/tree/master/images/net1-4.jpg)
+![四次挥手](https://github.com/XFHNever/JobPrepare/blob/master/images/net1-3.png)
 
 由于TCP连接时全双工的，因此，每个方向都必须要单独进行关闭，这一原则是当一方完成数据发送任务后，发送一个FIN来终止这一方向的连接，收到一个FIN只是意味着这一方向上没有数据流动了，即不会再收到数据了，但是在这个TCP连接上仍然能够发送数据，直到这一方向也发送了FIN。首先进行关闭的一方将执行主动关闭，而另一方则执行被动关闭，上图描述的即是如此。
 
