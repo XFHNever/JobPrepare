@@ -1,0 +1,1 @@
+##Jquery如何实现ajax？不使用Jquery又如何实现
