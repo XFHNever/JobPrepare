@@ -25,3 +25,5 @@
 ##简述下cookie的操作，还有cookie的属性都知道哪些。
 ##IE与FF的JS兼容性都知道哪些
 ##DOM操作 - 怎样添加、移除、移动、复制、创建和查找节点
+##事件冒泡（选项卡的实现）
+[JavaScript(十一)-事件冒泡和事件捕获](http://xfhnever.github.io/blog/2014/08/12/js-eventbubble/)
