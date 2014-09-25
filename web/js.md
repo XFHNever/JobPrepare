@@ -1,13 +1,18 @@
 ##异步加载js
-默认情况javascript是同步加载的，也就是javascript的加载时阻塞的，后面的元素要等待javascript加载完毕后才能进行再加载，
-对于一些意义不是很大的javascript，如果放在页头会导致加载很慢的话，是会严重影响用户体验的。
-
-异步加载方式：
-
-
 ##介绍一下闭包，写出一个例子
+[JavaScript(三)--闭包](http://xfhnever.github.io/blog/2014/05/08/js-closure/)
 ##如何优化js速度
+- 把不重要的JS放在页面最底部
+- 合并JS文件减少HTTP请求
+- 给JS文件减肥,压缩js文件
+- 最后执行JS文件，当window.onload事件触发完后，我们才开始加载JS
+- 尽量减少DOM访问
+- 使用适当的CDN   ： 内容分发网络（CDN）。它可以改进你的缓存机制
+- 在头部以异步方式装入JS
+- JavaScript打包成PNG文件
+
 ##js跨域的访问，img来实现跨域计数
+
 ##解决跨域的几种方法
 ##JS实现DOM元素的反转
 ##prototype的作用
@@ -25,3 +30,5 @@
 ##简述下cookie的操作，还有cookie的属性都知道哪些。
 ##IE与FF的JS兼容性都知道哪些
 ##DOM操作 - 怎样添加、移除、移动、复制、创建和查找节点
+##Java和JS中对象的区别
+

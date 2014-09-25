@@ -41,6 +41,7 @@ display:none ：隐藏对象。与 visibility 属性的hidden值不同，其不�
 ##如何实现九宫格
 ##经典的一侧定宽、另一侧自动扩展的布局如何设计
 ##介绍所知道的CSS hack技巧(如：_， *， +， \9， !important 之类)
+[CSS（十三）-CSS Hack](http://xfhnever.github.io/blog/2014/07/30/css-hack/)
 ##CSS层叠是什么？介绍一下。
 ##都知道哪些CSS浏览器兼容性问题
 ##如何居中一个浮动元素? 
