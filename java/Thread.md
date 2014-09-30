@@ -5,3 +5,16 @@
 ##如何在Java中实现线程
 java.lang.Thread 类的实例就是一个线程但是它需要调用java.lang.Runnable接口来执行，由于线程类本身就是调用的Runnable接口所以你可以继承java.lang.Thread 类或者直接调用Runnable接口来重写run()方法实现线程。
 ##Thread 类中的start() 和 run() 方法有什么区别
+
+##sleep() 和 wait() 有什么区别
+- 来自不同的类分别是，sleep来自Thread类，和wait来自Object类。
+- 最主要是sleep方法没有释放锁，而wait方法释放了锁，使得其他线程可以使用同步控制块或者方法
+- wait，notify和notifyAll只能在同步控制方法或者同步控制块里面使用，而sleep可以在任何地方使用
+
+        synchronized(x){
+            x.notify()
+            //或者wait()
+        }
+- sleep必须捕获异常，而wait，notify和notifyAll不需要捕获异常
+
+##同步和异步有何异同，在什么情况下分别使用他们

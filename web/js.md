@@ -31,7 +31,7 @@
 ##AJAX是什么? AJAX的交互模型(流程)? AJAX跨域的解决办法?
 ##同步和异步的区别? 
 ##简述JavaScript封装。
-##JavaScript继承有哪两种形式形式，进行描述。
+##JavaScript继承有哪两种形式，进行描述。
 ##在JS中this关键字的使用场合和用法(如在构造函数中、setTimeout中等)。
 ##简述下cookie的操作，还有cookie的属性都知道哪些。
 ##IE与FF的JS兼容性都知道哪些
