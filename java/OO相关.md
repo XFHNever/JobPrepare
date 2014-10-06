@@ -17,3 +17,48 @@
 4. 抽象
 
 	抽象就是将一类实体的共同特性抽象出来，封装在一个抽象类中，所以抽象在面向对象语言是由抽象类来体现的。抽象是以两种方式表现：Abstract Class和Interface。
+
+##abstract class和interface有什么区别?
+含有abstract修饰符的class即为抽象类，abstract 类不能创建的实例对象。含有abstract方法的类必须定义为abstract class，abstract class类中的方法不必是抽象的。
+abstract class类中定义抽象方法必须在具体(Concrete)子类中实现，所以，不能有抽象构造方法或抽象静态方法。如果的子类没有实现抽象父类中的所有抽象方法，那么子类也必须定义为abstract类型。
+
+接口（interface）可以说成是抽象类的一种特例，接口中的所有方法都必须是抽象的。接口中的方法定义默认为public abstract类型，接口中的成员变量类型默认为public static final。
+
+####区别
+1. 抽象类可以有构造方法，接口中不能有构造方法。
+2. 抽象类中可以有普通成员变量，接口中没有普通成员变量
+3. 抽象类中可以包含非抽象的普通方法，接口中的所有方法必须都是抽象的，不能有非抽象的普通方法。
+4. 抽象类中的抽象方法的访问类型可以是public，protected和，但接口中的抽象方法只能是public类型的，并且默认即为public abstract类型。
+5. 抽象类中可以包含静态方法，接口中不能包含静态方法
+6. 抽象类和接口中都可以包含静态成员变量，抽象类中的静态成员变量的访问类型可以任意，但接口中定义的变量只能是public static final类型，并且默认即为public static final类型。
+7. 一个类可以实现多个接口，但只能继承一个抽象类。
+
+####相同点
+1. 都不能被直接实例化，都可以通过继承实现其抽象方法。
+2. 都是面向抽象编程的技术基础，实现了诸多的设计模式。 
+
+##Static Nested Class 和 Inner Class的不同
+内部类就是在一个类的内部定义的类，内部类中不能定义静态成员,内部类可以直接访问外部类中的成员变量，内部类可以定义在外部类的方法外面，也可以定义在外部类的方法体中,也可以在外面创建内部类的实例对象
+
+Static Nested Class是被声明为静态（static）的内部类。意味着1创建一个static内部类的对象，不需要一个外部类对象，2不能从一个static内部类的一个对象访问一个外部类对象（不能直接访问外面的封装类的实例变量和方法）
+内部类，Local内部类，匿名内部类的实例都持有一个外部封装类实例的隐式引用
+
+Inner Class又可分为两类或者三类.
+ 
+ 1. 普通的 Inner Class, 在 Outer Class 中定义, 跟 其他成员一样.
+ 2. Local Inner Class. 在 Outer Class 的方法中或者任何一个block{}中定义,
+ 方法中定义的Inner Class, 其 input parameter 必须是 Final 修饰过的变量.
+ 3. 匿名 Inner Class(Anonymous Inner Class). 简单的说就是没有名字.
+ 
+##接口是否可继承接口? 抽象类是否可实现(implements)接口? 抽象类是否可继承实体类(concrete class)
+接口可以继承接口。抽象类可以实现(implements)接口，抽象类是否可继承实体类，但前提是实体类必须有明确的构造函数。
+
+##Java的接口和C++的虚类的相同和不同处
+C++虚类相当于java中的抽象类
+
+1. 一个子类只能继承一个抽象类（虚类），但能实现多个接口
+2. 一个抽象类可以有构造方法，接口没有构造方法
+3. 一个抽象类中的方法不一定是抽象方法，即其中的方法可以有实现（有方法体），接口中的方法都是抽象方法，不能有方法体，只有声明
+4. 一个抽象类可以是public、private、protected、default，接口只有public
+5. 一个抽象类中的方法可以是public、private、protected、default，接口中的方法只能是public和default
+

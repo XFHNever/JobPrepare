@@ -216,6 +216,160 @@ ListAdapter, ResourceCursorAdapter, SimpleAdapter, SimpleCursorAdapter, SpinnerA
 - 如果要正式发布一个Android ，必须使用一个合适的私钥生成的数字证书来给程序签名，而不能使用adt插件或者ant工具生成的调试证书来发布。 
 - 数字证书都是有有效期的，Android只是在应用程序安装的时候才会检查证书的有效期。如果程序已经安装在系统中，即使证书过期也不会影响程序的正常功能
 
+##什么是ANR 如何避免它
+ANR定义
+
+在Android上，如果你的应用程序有一段时间响应不够灵敏，系统会向用户显示一个对话框，这个对话框称作应用程序无响应（ANR：Application Not 
+Responding）对话框。用户可以选择让程序继续运行，但是，他们在使用你的应用程序时，并不希望每次都要处理这个对话框。因此，在程序里对响应性能的设
+计很重要，这样，系统不会显示ANR给用户。
+
+如何来避免：
+
+考虑上面的ANR定义，让我们来研究一下为什么它会在Android应用程序里发生和
+如何最佳构建应用程序来避免ANR。
+
+Android应用程序通常是运行在一个单独的线程（例如，main）里。这意味着你
+的应用程序所做的事情如果在主线程里占用了太长的时间的话，就会引发ANR对
+话框，因为你的应用程序并没有给自己机会来处理输入事件或者Intent广播。
+因此，运行在主线程里的任何方法都尽可能少做事情。特别是，Activity应该在
+它的关键生命周期方法（如onCreate()和onResume()）里尽可能少的去做创建操
+作。潜在的耗时操作，例如网络或数据库操作，或者高耗时的计算如改变位图尺
+寸，应该在子线程里（或者以数据库操作为例，通过异步请求的方式）来完成。
+然而，不是说你的主线程阻塞在那里等待子线程的完成——也不是调用
+Thread.wait()或是Thread.sleep()。替代的方法是，主线程应该为子线程提供
+一个Handler，以便完成时能够提交给主线程。以这种方式设计你的应用程序，
+将能保证你的主线程保持对输入的响应性并能避免由于5秒输入事件的超时引发
+的ANR对话框。这种做法应该在其它显示UI的线程里效仿，因为它们都受相同的
+超时影响。
+
+IntentReceiver执行时间的特殊限制意味着它应该做：在后台里做小的、琐碎的
+工作如保存设定或者注册一个Notification。和在主线程里调用的其它方法一样
+，应用程序应该避免在BroadcastReceiver里做耗时的操作或计算。但不再是在
+子线程里做这些任务（因为BroadcastReceiver的生命周期短），替代的是，如
+果响应Intent广播需要执行一个耗时的动作的话，应用程序应该启动一个
+Service。顺便提及一句，你也应该避免在Intent Receiver里启动一个Activity
+，因为它会创建一个新的画面，并从当前用户正在运行的程序上抢夺焦点。如果
+你的应用程序在响应Intent广播时需要向用户展示什么，你应该使用
+Notification Manager来实现。
+
+一般来说，在应用程序里，100到200ms是用户能感知阻滞的时间阈值。因此，这
+里有一些额外的技巧来避免ANR，并有助于让你的应用程序看起来有响应性。
+如果你的应用程序为响应用户输入正在后台工作的话，可以显示工作的进度
+（ProgressBar和ProgressDialog对这种情况来说很有用）。
+特别是游戏，在子线程里做移动的计算。
+如果你的应用程序有一个耗时的初始化过程的话，考虑可以显示一个Splash Screen或者快速显示主画面并异步来填充这些信息。在这两种情况下，你都应该
+显示正在进行的进度，以免用户认为应用程序被冻结了。
+
+##简要解释一下activity、 intent 、intent filter、service、Broadcast、BroadcastReceiver
+####Activity
+Android中，Activity是所有程序的根本，所有程序的流程都运行在Activity之中，Activity具有自己的生命周期(由系统控制生命周期，程序无法改变，但可以用onSaveInstanceState保存其状态）。
+
+对于Activity，关键是其生命周期的把握，其次就是状态的保存和恢复（onSaveInstanceState onRestoreInstanceState），以及Activity之间的跳转和数据传输（intent）。
+
+Activity中常用的函数有SetContentView()   findViewById()    finish()   startActivity()，其生命周期涉及的函数有：
+
+    void onCreate(Bundle savedInstanceState)
+    void onStart()
+    void onRestart()
+    void onResume()
+    void onPause()
+    void onStop()
+    void onDestroy()
+Activity的使用需要在Manifest文件中添加相应的<Activity>，并设置其属性和intent-filter。
+
+####Intent
+Android中提供了Intent机制来协助应用间的交互与通讯，Intent负责对应用中一次操作的动作、动作涉及数据、附加数据进行描述，Android则根据此Intent的描述，负责找到对应的组件，将 Intent传递给调用的组件，并完成组件的调
+用。Intent不仅可用于应用程序之间，也可用于应用程序内部的Activity/Service之间的交互。因此，Intent在这里起着一个媒体中介的作用，专门提供组件互相调用的相关信息，实现调用者与被调用者之间的解耦。在SDK
+中给出了Intent作用的表现形式为：
+
+- 通过Context.startActivity() orActivity.startActivityForResult() 启动一个Activity； 
+- 通过 Context.startService() 启动一个服务，或者通过 Context.bindService() 和后台服务交互； 
+- 通过广播方法(比如 Context.sendBroadcast(),Context.sendOrderedBroadcast(),  Context.sendStickyBroadcast()) 发给broadcast receivers。
+
+Intent属性的设置，包括以下几点：（以下为XML中定义，当然也可以通过Intent类的方法来获取和设置）
+
+- Action，也就是要执行的动作SDk中定义了一些标准的动作;也可以自定义动作（自定义的动作在使用时，需要加上包名作为前缀，如"com.example.project.SHOW_COLOR”），并可定义相应的Activity来处理我们的自定义动作。
+- Data，也就是执行动作要操作的数据.Android中采用指向数据的一个URI来表示，如在联系人应用中，一个指向某联系人的URI可能为：content://contacts/1。对于不同的动作，其URI数据的类型是
+       不同的（可以设置type属性指定特定类型数据），如ACTION_EDIT指定Data为文件URI，打电话为tel:URI，访问网络为http:URI，而由content provider提供的数据则为content: URIs。
+- type（数据类型），显式指定Intent的数据类型（MIME）。一般Intent的数据类型能够根据数据本身进行判定，但是通过设置这个属性，可以强制采用显式指定的类型而不再进行推导。
+- category（类别），被执行动作的附加信息。例如 LAUNCHER_CATEGORY 表示Intent 的接受者应该在Launcher中作为顶级应用出现；而ALTERNATIVE_CATEGORY表示当前的Intent是一系列的可选动作中的一个，这些动作可以在同一块数据上执行。
+- component（组件），指定Intent的的目标组件的类名称。通常 Android会根据Intent 中包含的其它属性的信息，比如action、data/type、category进行查找，最终找到一个与之匹配的目标组件。但是，如果 component这个属性有指
+   定的话，将直接使用它指定的组件，而不再执行上述查找过程。指定了这个属性以后，Intent的其它所有属性都是可选的。
+- extras（附加信息），是其它所有附加信息的集合。使用extras可以为组件提供扩展信息，比如，如果要执行“发送电子邮件”这个动作，可以将电子邮件的标题、正文等保存在extras里，传给电子邮件发送组件。
+
+理解Intent的关键之一是理解清楚Intent的两种基本用法：一种是显式的Intent，即在构造Intent对象时就指定接收者；另一种是隐式的Intent，即Intent的发送者在构造Intent对象时，并不知道也不关心接收者是谁，有利于降低发送者和
+接收者之间的耦合。
+
+对于显式Intent，Android不需要去做解析，因为目标组件已经很明确，Android需要解析的是那些隐式Intent，通过解析，将 Intent映射给可以处理此Intent的Activity、IntentReceiver或Service。        
+
+Intent解析机制主要是通过查找已注册在AndroidManifest.xml中的所有IntentFilter及其中定义的Intent，最终找到匹配的Intent。在这个解析过程中，Android是通过Intent的action、type、category这三个属性来进行判断的，
+判断方法如下：
+
+- 如果Intent指明定了action，则目标组件的IntentFilter的action列表中就必须包含有这个action，否则不能匹配； 
+- 如果Intent没有提供type，系统将从data中得到数据类型。和action一样，目标组件的数据类型列表中必须包含Intent的数据类型，否则不能匹配。 
+- 如果Intent中的数据不是content: 类型的URI，而且Intent也没有明确指定它的type，将根据Intent中数据的scheme （比如 http: 或者mailto:） 进行匹配。同上，Intent 的scheme必须出现在目标组件的scheme列表中。 
+- 如果Intent指定了一个或多个category，这些类别必须全部出现在组建的类别列表中。比如Intent中包含了两个类别：LAUNCHER_CATEGORY 和 ALTERNATIVE_CATEGORY，解析得到的目标组件必须至少包含这两个类别。
+
+
+
+####Intent Filter
+IntentFilter类表示Intent过滤器, 大部分情况下, 每一个component都会定义一个或多个IntentFilter, 用于表明其可处理的Intent. 
+####Service
+service是没有界面的长生命周期的代码。一个很好的例子是媒体播放器从列表 中播放歌曲。在一个媒体播放器程序中，大概要有一个或多个活动（activity） 来供用户选择歌曲并播放它。然而，音乐的回放就不能使用活动（activity）了 
+，因为用户希望他导航到其他界面时音乐继续播放。这种情况下，媒体播放器活动（activity）要用Context.startService()启动一个服务来在后台运行保持音 乐的播放。系统将保持这个音乐回放服务的运行直到它结束。注意一下，你要用 
+Context.bindService()方法连接服务（如果它没有运行，要先启动它）。当连 接到服务后，你可以通过服务暴露的一个接口和它通信。对于音乐服务，它允许你暂停、倒带，等等。
+
+####Broadcast/BroadcastReceiver
+ 在Android中，Broadcast是一种广泛运用的在应用程序之间传输信息的机制。而BroadcastReceiver是对发送出来的 Broadcast进行过滤接受并响应的一类组件。下面将详细的阐述如何发送Broadcast和使用BroadcastReceiver过 
+滤接收的过程： 
+
+首先在需要发送信息的地方，把要发送的信息和用于过滤的信息(如Action、Category)装入一个Intent对象，然后通过调用 Context.sendBroadcast()、sendOrderBroadcast()或sendStickyBroadcast()方法，把 Intent对象以广播方
+式发送出去。 
+    
+当Intent发送以后，所有已经注册的BroadcastReceiver会检查注册时的IntentFilter是否与发送的Intent相匹配，若 匹配则就会调用BroadcastReceiver的onReceive()方法。所以当我们定义一个
+BroadcastReceiver的时候，都需要 实现onReceive()方法。
+
+注册BroadcastReceiver有两种方式: 
+
+一种方式是，静态的在AndroidManifest.xml中用<receiver>标签生命注册，并在标签内用<intent- filter>标签设置过滤器。 
+    
+另一种方式是，动态的在代码中先定义并设置好一个 IntentFilter对象，然后在需要注册的地方调 Context.registerReceiver()方法，如果取消时就调用Context.unregisterReceiver()方法。
+
+不管是用xml注册的还是用代码注册的,在程序退出的时候没有特殊需要都得注销,否则下次启动程序可能会有多个 BroadcastReceiver
+
+另外，若在使用sendBroadcast()的方法是指定了接收权限，则只有在AndroidManifest.xml中用<uses- permission>标签声明了拥有此权限的BroascastReceiver才会有可能接收到发送来的Broadcast。 
+    
+同样，若在注册BroadcastReceiver时指定了可接收的Broadcast的权限，则只有在包内的AndroidManifest.xml中 用<uses-permission>标签声明了，拥有此权限的Context对象所发送的Broadcast才能被这个 BroadcastReceiver所接收。 
+
+动态注册：
+
+    IntentFilter intentFilter = new IntentFilter(); 
+    intentFilter.addAction(String);--为 BroadcastReceiver指定action，
+    使之用于接收同action的广播 registerReceiver(BroadcastReceiver,intentFilter); 
+    一般：在onStart中注册，onStop中取消unregisterReceiver 
+    发送广播消息：extends Service 
+    指定广播目标Action：Intent Intent = new Intent(action-String) 
+    --指定了此action的receiver会接收此广播 
+    需传递参数(可选) putExtra(); 
+    发送：sendBroadcast(Intent);
+    
+##如果后台的Activity由于某原因被系统回收了，如何在被系统回收之前保存当前状态
+重写onDestroy方法，在方法中保存
+
+##如何将一个Activity设置成窗口的样式
+可以直接添加您对应需要展示为Dialog style的Activity的android:theme属性,值为android:theme="@android:style/Theme.Dialog"。
+##如何退出Activity？如何安全退出已调用多个Activity的Application
+1. 抛异常强制退出：
+    该方法通过抛异常，使程序Force Close。验证可以，但是，需要解决的问题是，如何使程序结束掉，而不弹出Force Close的窗口。
+2. 记录打开的Activity：
+    每打开一个Activity，就记录下来。在需要退出时，关闭每一个Activity即可。
+3. 发送特定广播：
+    在需要结束应用时，发送一个特定的广播，每个Activity收到广播后，关闭即可。
+4. 递归退出
+    在打开新的Activity时使用startActivityForResult，然后自己加标志，在onActivityResult中处理，递归关闭。
+
+##
+
 
 
 
