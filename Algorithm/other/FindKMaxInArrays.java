@@ -9,22 +9,24 @@ import java.util.List;
 public class FindKMaxInArrays {
     public static void main(String arg[]) {
         FindKMaxInArrays findKMaxInArrays = new FindKMaxInArrays();
-        int[] array1 = {40,23,12,5,4,3,2,1};
-        int[] array2 = {42,24};
-        int[] array3 = {44,32,21,5,4,3,2,1};
+        int[] array1 = {1,3,5,9,100};
+        int[] array2 = {24, 45, 111};
+        int[] array3 = {2, 4,8,10, 101};
+        int[] array4 = {45, 67, 89, 102};
         ArrayList<int[]> list = new ArrayList<int[]>();
         list.add(array1);
         list.add(array2);
         list.add(array3);
+        list.add(array4);
 
-        findKMaxInArrays.findK(10, list);
+        findKMaxInArrays.findK3(list, 10);
     }
 
     private void findK(int K, List<int[]> list) {
         int size = list.size();
         Node[] nodes = new Node[size];
 
-        for (int i=0; i< size; i++) {
+        for (int i = 0; i < size; i++) {
             Node node = new Node();
             node.group = i;
             node.index = 0;
@@ -32,30 +34,31 @@ public class FindKMaxInArrays {
             nodes[i] = node;
         }
 
-        MaxHeap heap = new MaxHeap(size+2, nodes);
-        for (int i=(size-2)/2; i>=0; i--) {
-            heap.siftDown(i, size-1);
+        MaxHeap heap = new MaxHeap(size + 2, nodes);
+        for (int i = (size - 2) / 2; i >= 0; i--) {
+            heap.siftDown(i, size - 1);
         }
 
-        while (K>0) {
+        while (K > 0) {
             Node top = heap.nodes[0];
             System.out.print(top.value + "\t");
 
             Node newNode = new Node();
             newNode.group = top.group;
             newNode.index = top.index + 1;
-            if (top.index >= list.get(top.group).length -1) {
+            if (top.index >= list.get(top.group).length - 1) {
                 newNode.value = Integer.MIN_VALUE;
             } else {
                 newNode.value = list.get(newNode.group)[newNode.index];
             }
 
             heap.nodes[0] = newNode;
-            heap.siftDown(0, size-1);
+            heap.siftDown(0, size - 1);
             K--;
         }
 
     }
+
     class Node {
         int value;
         int group;
@@ -75,11 +78,11 @@ public class FindKMaxInArrays {
 
         public void siftDown(int start, int end) {
             int i = start;
-            int j = 2*i + 1;
+            int j = 2 * i + 1;
             Node tmp = nodes[start];
 
             while (j <= end) {
-                if (j < end && nodes[j].value < nodes[j+1].value) {
+                if (j < end && nodes[j].value < nodes[j + 1].value) {
                     j++;
                 }
 
@@ -88,7 +91,7 @@ public class FindKMaxInArrays {
                 } else {
                     nodes[i] = nodes[j];
                     i = j;
-                    j = 2*i + 1;
+                    j = 2 * i + 1;
                 }
             }
 
@@ -96,48 +99,80 @@ public class FindKMaxInArrays {
         }
     }
 
+    private void findK3(List<int[]> list, int k) {
+        LoserTree tree = new LoserTree(list, k);
+        tree.merge();
+    }
+
     class LoserTree {
         int size;
         int[] b, ls;
+        List<int[]> list;
+        int k;
 
 
-        public LoserTree(List<int[]> list) {
+        public LoserTree(List<int[]> list, int k) {
+            this.list = list;
             this.size = list.size();
             b = new int[size + 1];
-            ls = new int[2*size];
+            ls = new int[size];
+            this.k = k;
         }
 
         public void adjust(int s) {
-            int i,j;
+            int i, j;
 
-            for (j = (size+s)/2; j>0; j/=2) {
+            j = (s + size) / 2;
+            while (j > 0) {
                 if (b[s] > b[ls[j]]) {
-                    swap(ls, s, j);
+                    i = s;
+                    s = ls[j];
+                    ls[j] = i;
                 }
+                j = j / 2;
             }
             ls[0] = s;
         }
 
         public void merge() {
+            for (int i = 0; i < size; i++) {
+                b[i] = getFirst(list.get(i));
+            }
 
+            createLoserTree();
+            while (k>0) {
+                int out = ls[0];
+                System.out.print(b[out] + "\t");
+
+                b[out] = getFirst(list.get(out));
+
+                adjust(out);
+                k--;
+            }
         }
 
         public void createLoserTree() {
-            int i=0;
+            int i;
             b[size] = Integer.MIN_VALUE;
-            for (i = 1; i<size; i++) {
+            for (i = 0; i < size; i++) {
                 ls[i] = size;
             }
 
-            for (i=size-1; i>=0; i--) {
+            for (i = size - 1; i >= 0; i--) {
                 adjust(i);
             }
         }
 
-        private void swap(int[] array, int left, int right) {
-            int tem = array[left];
-            array[left] = array[right];
-            array[right] = tem;
+        private int getFirst(int[] array) {
+            int result = Integer.MIN_VALUE;
+            if (array.length > 0) {
+                result = array[0];
+                for (int i=0; i<array.length-1; i++) {
+                    array[i] = array[i+1];
+                }
+            }
+            return result;
         }
+
     }
 }
