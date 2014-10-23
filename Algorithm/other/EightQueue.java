@@ -16,6 +16,7 @@ public class EightQueue {
         for (int i=0; i<this.count; i++) {
             s[i] = -1;
         }
+
     }
     
     public void queue(int n) {
